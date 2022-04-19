@@ -7,8 +7,5 @@ import (
 func main() {
 	c := cut.NewConfig()
 	cu := cut.NewCut(c)
-	if err := cu.Start(); err != nil {
-		return
-	}
-
+	cu.Start()
 }

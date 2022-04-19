@@ -1,19 +1,17 @@
 package cut
 
 import (
-	"fmt"
+	"log"
 )
 
 // Start ф-я запуска
-func (cu *Cut) Start() error {
+func (cu *Cut) Start() {
 	cu.SetFlag()
 	cu.GetColumns()
 	cu.GetPrintColumnsIndex()
 	if !cu.CheckColumnsForF() {
-		fmt.Println("columns go beyond the boundaries of the entered data")
+		log.Fatalln("columns go beyond the boundaries of the entered data")
 	} else {
 		cu.PrintColumns()
 	}
-
-	return nil
 }

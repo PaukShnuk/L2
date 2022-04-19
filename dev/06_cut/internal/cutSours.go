@@ -42,7 +42,7 @@ func (cu *Cut) GetColumns() {
 	}
 }
 
-// GetFRange метод для получения интексов выводимых столбцов
+// GetFRange метод для получения диапазона интексов выводимых столбцов
 func (cu *Cut) GetFRange(str string) {
 	var num1, num2 int
 	var err error
@@ -99,8 +99,9 @@ func (cu *Cut) GetPrintColumnsIndex() {
 		if err != nil || num < 1 {
 			log.Fatalf("bad -f range value")
 		}
-		cu.FRange = append(cu.FRange, num)
+		cu.FRange = append(cu.FRange, num-1)
 	}
+
 }
 
 // CheckColumnsForF метод определения, существуют ли колонки с введёнными индексами
