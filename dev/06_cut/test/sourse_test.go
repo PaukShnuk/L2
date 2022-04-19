@@ -73,16 +73,12 @@ func TestGetPrintColumnsIndex(t *testing.T) {
 		Flags: cut.Flags{F: "9, 1-4, 1"},
 	}
 
-	c7 := cut.Config{
-		Flags: cut.Flags{F: "b-a,4,9"},
-	}
 	t1 := []int{0, 1, 2, 3, 4}
 	t2 := new([]int)
 	t3 := []int{1, 2, 3, 5, 7, 8, 9}
 	t4 := []int{3}
 	t5 := []int{0, 3, 8}
 	t6 := []int{8, 0, 1, 2, 3, 0}
-	t7 := new([]int)
 
 	test := testArr{a: []testIndex{
 		{
@@ -102,9 +98,6 @@ func TestGetPrintColumnsIndex(t *testing.T) {
 		},
 		{
 			c6, t6,
-		},
-		{
-			c7, *t7,
 		},
 	}}
 	cu := cut.Cut{}
