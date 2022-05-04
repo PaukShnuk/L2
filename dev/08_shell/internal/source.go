@@ -179,7 +179,7 @@ func (s *Shell) CaseShell(line string) error {
 					}
 				}
 			} else {
-				return CdErr
+				return errCd
 			}
 		case "ps":
 			if len(commandAndArgs) == 1 {
@@ -187,16 +187,15 @@ func (s *Shell) CaseShell(line string) error {
 					return err
 				}
 			} else {
-				return psErr
+				return errPs
 			}
 		case "pwd":
 			if len(commandAndArgs) != 1 {
-				return PwdErr
-			} else {
-				err := s.pwd()
-				if err != nil {
-					return err
-				}
+				return errPwd
+			}
+			err := s.pwd()
+			if err != nil {
+				return err
 			}
 
 		case "echo":
@@ -206,7 +205,7 @@ func (s *Shell) CaseShell(line string) error {
 					return err
 				}
 			} else {
-				return EchoErr
+				return errEcho
 			}
 		case "kill":
 			if len(commandAndArgs) != 1 {
@@ -217,7 +216,7 @@ func (s *Shell) CaseShell(line string) error {
 					}
 				}
 			} else {
-				return KillErr
+				return errKill
 			}
 		case "exec":
 			if len(commandAndArgs) != 1 {
@@ -226,7 +225,7 @@ func (s *Shell) CaseShell(line string) error {
 					return err
 				}
 			} else {
-				return ExecErr
+				return errExec
 			}
 		default:
 			if _, err := fmt.Fprintf(s.Out, "unknown command '%v'\n", commandAndArgs[0]); err != nil {
@@ -237,6 +236,7 @@ func (s *Shell) CaseShell(line string) error {
 	return nil
 }
 
+// CheckPipes проверка строки на наличие пайпов
 func (s *Shell) CheckPipes(line string) error {
 	strCmd := strings.Split(line, "|")
 	if len(strCmd) > 1 {

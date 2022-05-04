@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+    <title>How to Scrape Instagram Profiles | Colly</title>
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+
+    <meta content="http://go-colly.org/logo.png" property="og:image" />
+    <meta content="How to Scrape Instagram Profiles | Colly" property="og:title" />
+    <meta content="Scraping framework for extracting the data you need from websites, used for a wide range of applications, like data mining, data processing or archiving" property="og:description" />
+    <meta name="description" content="Scraping framework for extracting the data you need from websites, used for a wide range of applications, like data mining, data processing or archiving">
+
+
+    <meta name="generator" content="Hugo 0.29" />
+
+    <META NAME="ROBOTS" CONTENT="INDEX, FOLLOW">
+    
+
+    <link href="http://go-colly.org/css/semantic.min.css" rel="stylesheet" type="text/css" />
+<style>
+html { font-size: 16px; }
+body { display: flex; min-height: 100vh; flex-direction: column; }
+p, li { font-size: 18px; }
+pre > code { background: transparent; font-size: 14px; }
+p > code, li > code { background: #F0F0F0; padding: 2px 4px; font-size: 16px !important; }
+pre { padding: 8px; overflow: auto !important; }
+table { border-collapse: collapse; }
+th { text-align: left; }
+td, th { border: 1px solid #888888; padding: 8px; }
+.maincode * { font-size: 14px; }
+.highlight > div { border-radius: 6px !important; }
+.content { flex: 1; }
+.padding { padding: 16px !important; }
+.bigtext { font-size: 2.5em; }
+.smalltext { font-size: 0.8em; }
+.tip { padding: 0.5em 1em !important; }
+.tip p { font-size: 14px; }
+#menu { padding: 0 20px; }
+.landing { min-height: 300px; }
+.landing h2 { font-size: 1.6em !important; }
+.landing h1, .landing h2, .landing h3 { font-weight: 100 !important; }
+.masthead, .footer { background: linear-gradient(to right, #231333, #1f3c3d) !important; }
+.computer, .tablet { padding: 0 !important; }
+.ui.vertical.navbar.menu { margin-top: -15px !important; width: 100%; display: none; }
+.ui.secondary { width: 100% !important; }
+</style>
+  </head>
+  <body>
+    <div class="ui inverted vertical masthead center aligned segment" id="menu">
+      <div class="ui large secondary inverted icon menu grid">
+        <div class="tablet computer only row">
+        <a class="item" href="http://go-colly.org/"><b>Colly</b></a>
+        
+        <a class="item" href="/docs/">Docs</a>
+        
+        <a class="item" href="/articles/">Articles</a>
+        
+        <a class="item" href="/services/">Services</a>
+        
+        <a class="item" href="/datasets/">Datasets</a>
+        
+        <a class="right item" href="https://godoc.org/github.com/gocolly/colly" target="_blank">GoDoc</a>
+        <a class="item" href="https://github.com/gocolly/colly" target="_blank"><i class="github big icon"></i></a>
+        </div>
+        <div class="mobile only row">
+			<div class="ui secondary navbar menu">
+                <a href="http://go-colly.org/" class="brand item">Colly</a>
+                <div class="right menu open">
+                    <a href="" class="menu item">
+                        <i class="big sidebar icon"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="ui vertical secondary navbar menu">
+				
+				<a class="item" href="/docs/">Docs</a>
+				
+				<a class="item" href="/articles/">Articles</a>
+				
+				<a class="item" href="/services/">Services</a>
+				
+				<a class="item" href="/datasets/">Datasets</a>
+				
+                <div class="ui divider"></div>
+				<a class="item" href="https://godoc.org/github.com/gocolly/colly" target="_blank">GoDoc</a>
+				<a class="item" href="https://github.com/gocolly/colly" target="_blank">GitHub</a>
+			</div>
+        </div>
+      </div>
+    </div>
+    <div class="content">
+    
+<p></p>
+<div class="ui stackable grid container">
+  <div class="row">
+    <div class="sixteen wide column">
+      <h1>How to Scrape Instagram Profiles</h1>
+    </div>
+  </div>
+  <div class="row">
+    <div class="twelve wide column">
+      
+
+<p>Scraping can be tedious work especially if the target site isn&rsquo;t just a standard static HTML page. Plenty of modern sites have JavaScript only UIs where extracting content is not always trivial. Instagram is one of these websites, so I would like to show you how it is possible to write a scraper relatively fast to get images from Instagram. The full working example can be found <a href="/docs/examples/instagram/">here</a>.</p>
+
+<h2 id="information-gathering">Information gathering</h2>
+
+<p>First, if we view the source code of a profile page (e.g. <a href="https://instagram.com/instagram">https://instagram.com/instagram</a>), we can see a bunch of JavaScript code inside the <code>body</code> tag instead of static HTML tags. Let&rsquo;s take a closer look at it. We can see that the first <code>script</code> is just a variable declaration where a huge JSON is assigned to a single variable (<code>window._sharedData</code>). This JSON can be easily extracted from the <code>script</code> tag by finding the first <code>{</code> character and getting the whole content after it:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">jsonData</span><span style=""> </span><span style="color:#f92672">:=</span><span style=""> </span><span style="color:#a6e22e">scriptContent</span><span style="">[</span><span style="color:#a6e22e">strings</span><span style="">.</span><span style="color:#a6e22e">Index</span><span style="">(</span><span style="color:#a6e22e">scriptContent</span><span style="">,</span><span style=""> </span><span style="color:#e6db74">&#34;{&#34;</span><span style="">)</span><span style=""> </span><span style="">:</span><span style=""> </span><span style="">len</span><span style="">(</span><span style="color:#a6e22e">scriptContent</span><span style="">)</span><span style="color:#f92672">-</span><span style="color:#ae81ff">1</span><span style="">]</span></code></pre>
+</div>
+<p>Note that because it is a JavaScript variable declaration it has a trailing semicolon what we have to cut off to get a valid JSON. That&rsquo;s why the example above ends with <code>len(scriptContent)-1</code>.</p>
+
+<p>The formatted view of the extracted JSON reveals all the information we are looking for. The JSON contains information about a user&rsquo;s images and some metadata of the profile (e.g. the profile ID is <code>25025320</code>). There is an interesting part of the metadata called <code>page_info</code>:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json"><span style=""> </span><span style="color:#e6db74">&#34;page_info&#34;</span><span style="color:#960050;background-color:#1e0010">:</span><span style=""> </span><span style="">{</span><span style="">
+</span><span style="">  </span><span style="color:#f92672">&#34;has_next_page&#34;</span><span style="">:</span><span style=""> </span><span style="color:#66d9ef">true</span><span style="">,</span><span style="">
+</span><span style="">  </span><span style="color:#f92672">&#34;end_cursor&#34;</span><span style="">:</span><span style=""> </span><span style="color:#e6db74">&#34;AQBiQhGRC6c6f-YOxdU0ApaAvotN4zI601ymkAtQ8SutdWz2n-bKFCkv51PMAoi9im3tNDTFLyhV969z8a6JnAkQMzHbYVwNI4Ke7jbk99nvFA&#34;</span><span style="">
+</span><span style=""> </span><span style="">}</span></code></pre>
+</div>
+<p>Probably, the value of <code>end_cursor</code>&rsquo; is the attribute of the URL to get the next page when <code>has_next_page</code> is <code>true</code>.</p>
+
+<div class="ui info icon message tip">
+  <i class="info circle icon"></i>
+  <div class="content">
+    <div class="header">Tip</div>
+    <p>Format JSONs with the handy <a href="https://github.com/stedolan/jq" target="_blank">jq</a> command line tool</p>
+  </div>
+</div>
+
+
+<h3 id="paging">Paging</h3>
+
+<p>The next page of the user profile is retrieved by an AJAX call, so we have to use the browser&rsquo;s Network Inspector to find out what is required to fetch it. Network Inspector shows a long and cryptic URL which has two GET parameters <code>query_id</code> and <code>variables</code>:
+    </p>
+
+<pre><code>https://www.instagram.com/graphql/query/?query_id=17888483320059182&amp;variables=%7B%22id%22%3A%2225025320%22%2C%22first%22%3A12%2C%22after%22%3A%22AQBiQhGRC6c6f-YOxdU0ApaAvotN4zI601ymkAtQ8SutdWz2n-bKFCkv51PMAoi9im3tNDTFLyhV969z8a6JnAkQMzHbYVwNI4Ke7jbk99nvFA%22%7D
+</code></pre>
+
+<p>It seems like Instagram uses a <a href="https://en.wikipedia.org/wiki/GraphQL">GraphQL</a> API and the value of <code>variables</code> GET parameter is an URL encoded value. We can decode it with a single line of Python code:</p>
+
+<pre><code>$ python -c 'import urlparse;print(urlparse.parse_qs(&quot;variables=%7B%22id%22%3A%2225025320%22%2C%22first%22%3A12%2C%22after%22%3A%22AQBiQhGRC6c6f-YOxdU0ApaAvotN4zI601ymkAtQ8SutdWz2n-bKFCkv51PMAoi9im3tNDTFLyhV969z8a6JnAkQMzHbYVwNI4Ke7jbk99nvFA%22%7D&quot;)[&quot;variables&quot;][0])'
+{&quot;id&quot;:&quot;25025320&quot;,&quot;first&quot;:12,&quot;after&quot;:&quot;AQBiQhGRC6c6f-YOxdU0ApaAvotN4zI601ymkAtQ8SutdWz2n-bKFCkv51PMAoi9im3tNDTFLyhV969z8a6JnAkQMzHbYVwNI4Ke7jbk99nvFA&quot;}
+</code></pre>
+
+<p>As you can see it is a JSON object and the value of the <code>after</code> attribute is the same as the value of the <code>end_cursor</code> and <code>id</code> is the ID of the profile.</p>
+
+<p>The only unknown information in the next page URL is the <code>query_id</code> GET parameter. The HTML source code does not contain it, nor the cookies or response headers. After a little bit of digging it can be found in a static JS file included in the main page and seems it is a constant value.</p>
+
+<p>The format of the response is also JSON but the structure is different from what we&rsquo;ve found on the main page. This JSON contains the same information as the previous one, however we cannot use the same method to extract data due to structural differences.</p>
+
+<h2 id="building-the-scraper">Building the scraper</h2>
+
+<p>The information gathering phase clearly shows that we need four building blocks to be able to fetch all images found on an Instagram profile. Let&rsquo;s do it using Colly.</p>
+
+<h3 id="extract-and-parse-json-from-the-main-page">Extract and parse JSON from the main page</h3>
+
+<p>To extract content from HTML we need a new <code>Collector</code> which has a HTML callback to extract the JSON data from the <code>script</code> element. Specifying this callback and when it must be called can be done in <code>OnHTML</code> function of <code>Collector</code>.
+The JSON can be easily converted to native Go structure using <code>json.Unmarshal</code> from the standard library.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">c</span><span style=""> </span><span style="color:#f92672">:=</span><span style=""> </span><span style="color:#a6e22e">colly</span><span style="">.</span><span style="color:#a6e22e">NewCollector</span><span style="">()</span><span style="">
+</span><span style="">
+</span><span style=""></span><span style="color:#a6e22e">c</span><span style="">.</span><span style="color:#a6e22e">OnHTML</span><span style="">(</span><span style="color:#e6db74">&#34;body &gt; script:first-of-type&#34;</span><span style="">,</span><span style=""> </span><span style="color:#66d9ef">func</span><span style="">(</span><span style="color:#a6e22e">e</span><span style=""> </span><span style="color:#f92672">*</span><span style="color:#a6e22e">colly</span><span style="">.</span><span style="color:#a6e22e">HTMLElement</span><span style="">)</span><span style=""> </span><span style="">{</span><span style="">
+</span><span style="">    </span><span style="color:#75715e">// find JSON string
+</span><span style="color:#75715e"></span><span style="">    </span><span style="color:#a6e22e">jsonData</span><span style=""> </span><span style="color:#f92672">:=</span><span style=""> </span><span style="color:#a6e22e">e</span><span style="">.</span><span style="color:#a6e22e">Text</span><span style="">[</span><span style="color:#a6e22e">strings</span><span style="">.</span><span style="color:#a6e22e">Index</span><span style="">(</span><span style="color:#a6e22e">e</span><span style="">.</span><span style="color:#a6e22e">Text</span><span style="">,</span><span style=""> </span><span style="color:#e6db74">&#34;{&#34;</span><span style="">)</span><span style=""> </span><span style="">:</span><span style=""> </span><span style="">len</span><span style="">(</span><span style="color:#a6e22e">e</span><span style="">.</span><span style="color:#a6e22e">Text</span><span style="">)</span><span style="color:#f92672">-</span><span style="color:#ae81ff">1</span><span style="">]</span><span style="">
+</span><span style="">
+</span><span style="">    </span><span style="color:#75715e">// parse JSON
+</span><span style="color:#75715e"></span><span style="">    </span><span style="color:#a6e22e">data</span><span style=""> </span><span style="color:#f92672">:=</span><span style=""> </span><span style="color:#66d9ef">struct</span><span style=""> </span><span style="">{</span><span style="">
+</span><span style="">       </span><span style="color:#a6e22e">EntryData</span><span style=""> </span><span style="color:#66d9ef">struct</span><span style=""> </span><span style="">{</span><span style="">
+</span><span style="">           </span><span style="color:#a6e22e">ProfilePage</span><span style=""> </span><span style="">[]</span><span style="color:#66d9ef">struct</span><span style=""> </span><span style="">{</span><span style="">
+</span><span style="">               </span><span style="color:#a6e22e">User</span><span style=""> </span><span style="color:#66d9ef">struct</span><span style=""> </span><span style="">{</span><span style="">
+</span><span style="">                   </span><span style="color:#a6e22e">Id</span><span style="">    </span><span style="color:#66d9ef">string</span><span style=""> </span><span style="color:#e6db74">`json:&#34;id&#34;`</span><span style="">
+</span><span style="">                   </span><span style="color:#a6e22e">Media</span><span style=""> </span><span style="color:#66d9ef">struct</span><span style=""> </span><span style="">{</span><span style="">
+</span><span style="">                       </span><span style="color:#a6e22e">Nodes</span><span style=""> </span><span style="">[]</span><span style="color:#66d9ef">struct</span><span style=""> </span><span style="">{</span><span style="">
+</span><span style="">                           </span><span style="color:#a6e22e">ImageURL</span><span style="">     </span><span style="color:#66d9ef">string</span><span style=""> </span><span style="color:#e6db74">`json:&#34;display_src&#34;`</span><span style="">
+</span><span style="">                           </span><span style="color:#a6e22e">ThumbnailURL</span><span style=""> </span><span style="color:#66d9ef">string</span><span style=""> </span><span style="color:#e6db74">`json:&#34;thumbnail_src&#34;`</span><span style="">
+</span><span style="">                           </span><span style="color:#a6e22e">IsVideo</span><span style="">      </span><span style="color:#66d9ef">bool</span><span style="">   </span><span style="color:#e6db74">`json:&#34;is_video&#34;`</span><span style="">
+</span><span style="">                           </span><span style="color:#a6e22e">Date</span><span style="">         </span><span style="color:#66d9ef">int</span><span style="">    </span><span style="color:#e6db74">`json:&#34;date&#34;`</span><span style="">
+</span><span style="">                           </span><span style="color:#a6e22e">Dimensions</span><span style="">   </span><span style="color:#66d9ef">struct</span><span style=""> </span><span style="">{</span><span style="">
+</span><span style="">                               </span><span style="color:#a6e22e">Width</span><span style="">  </span><span style="color:#66d9ef">int</span><span style=""> </span><span style="color:#e6db74">`json:&#34;width&#34;`</span><span style="">
+</span><span style="">                               </span><span style="color:#a6e22e">Height</span><span style=""> </span><span style="color:#66d9ef">int</span><span style=""> </span><span style="color:#e6db74">`json:&#34;height&#34;`</span><span style="">
+</span><span style="">                           </span><span style="">}</span><span style="">
+</span><span style="">                       </span><span style="">}</span><span style="">
+</span><span style="">                       </span><span style="color:#a6e22e">PageInfo</span><span style=""> </span><span style="color:#a6e22e">pageInfo</span><span style=""> </span><span style="color:#e6db74">`json:&#34;page_info&#34;`</span><span style="">
+</span><span style="">                   </span><span style="">}</span><span style=""> </span><span style="color:#e6db74">`json:&#34;media&#34;`</span><span style="">
+</span><span style="">               </span><span style="">}</span><span style=""> </span><span style="color:#e6db74">`json:&#34;user&#34;`</span><span style="">
+</span><span style="">           </span><span style="">}</span><span style=""> </span><span style="color:#e6db74">`json:&#34;ProfilePage&#34;`</span><span style="">
+</span><span style="">       </span><span style="">}</span><span style=""> </span><span style="color:#e6db74">`json:&#34;entry_data&#34;`</span><span style="">
+</span><span style="">    </span><span style="">}{}</span><span style="">
+</span><span style="">    </span><span style="color:#a6e22e">err</span><span style=""> </span><span style="color:#f92672">:=</span><span style=""> </span><span style="color:#a6e22e">json</span><span style="">.</span><span style="color:#a6e22e">Unmarshal</span><span style="">([]</span><span style="">byte</span><span style="">(</span><span style="color:#a6e22e">jsonData</span><span style="">),</span><span style=""> </span><span style="color:#f92672">&amp;</span><span style="color:#a6e22e">data</span><span style="">)</span><span style="">
+</span><span style="">    </span><span style="color:#66d9ef">if</span><span style=""> </span><span style="color:#a6e22e">err</span><span style=""> </span><span style="color:#f92672">!=</span><span style=""> </span><span style="color:#66d9ef">nil</span><span style=""> </span><span style="">{</span><span style="">
+</span><span style="">        </span><span style="color:#a6e22e">log</span><span style="">.</span><span style="color:#a6e22e">Fatal</span><span style="">(</span><span style="color:#a6e22e">err</span><span style="">)</span><span style="">
+</span><span style="">    </span><span style="">}</span><span style="">
+</span><span style="">
+</span><span style="">    </span><span style="color:#75715e">// enumerate images
+</span><span style="color:#75715e"></span><span style="">    </span><span style="color:#a6e22e">page</span><span style=""> </span><span style="color:#f92672">:=</span><span style=""> </span><span style="color:#a6e22e">data</span><span style="">.</span><span style="color:#a6e22e">EntryData</span><span style="">.</span><span style="color:#a6e22e">ProfilePage</span><span style="">[</span><span style="color:#ae81ff">0</span><span style="">]</span><span style="">
+</span><span style="">    </span><span style="color:#a6e22e">actualUserId</span><span style=""> </span><span style="">=</span><span style=""> </span><span style="color:#a6e22e">page</span><span style="">.</span><span style="color:#a6e22e">User</span><span style="">.</span><span style="color:#a6e22e">Id</span><span style="">
+</span><span style="">    </span><span style="color:#66d9ef">for</span><span style=""> </span><span style="color:#a6e22e">_</span><span style="">,</span><span style=""> </span><span style="color:#a6e22e">obj</span><span style=""> </span><span style="color:#f92672">:=</span><span style=""> </span><span style="color:#66d9ef">range</span><span style=""> </span><span style="color:#a6e22e">page</span><span style="">.</span><span style="color:#a6e22e">User</span><span style="">.</span><span style="color:#a6e22e">Media</span><span style="">.</span><span style="color:#a6e22e">Nodes</span><span style=""> </span><span style="">{</span><span style="">
+</span><span style="">        </span><span style="color:#75715e">// skip videos
+</span><span style="color:#75715e"></span><span style="">        </span><span style="color:#66d9ef">if</span><span style=""> </span><span style="color:#a6e22e">obj</span><span style="">.</span><span style="color:#a6e22e">IsVideo</span><span style=""> </span><span style="">{</span><span style="">
+</span><span style="">            </span><span style="color:#66d9ef">continue</span><span style="">
+</span><span style="">        </span><span style="">}</span><span style="">
+</span><span style="">        </span><span style="color:#a6e22e">c</span><span style="">.</span><span style="color:#a6e22e">Visit</span><span style="">(</span><span style="color:#a6e22e">obj</span><span style="">.</span><span style="color:#a6e22e">ImageURL</span><span style="">)</span><span style="">
+</span><span style="">    </span><span style="">}</span><span style="">
+</span><span style="">    </span><span style="color:#75715e">// ...
+</span><span style="color:#75715e"></span><span style="">}</span></code></pre>
+</div>
+<h3 id="create-and-visit-next-page-urls">Create and visit next page URLs</h3>
+
+<p>The format of the next page URL is fixed, so a format string can be declared which accepts the changing <code>id</code> and <code>after</code> parameters.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">const</span><span style=""> </span><span style="color:#a6e22e">nextPageURLTemplate</span><span style=""> </span><span style="color:#66d9ef">string</span><span style=""> </span><span style="">=</span><span style=""> </span><span style="color:#e6db74">`https://www.instagram.com/graphql/query/?query_id=17888483320059182&amp;variables={&#34;id&#34;:&#34;%s&#34;,&#34;first&#34;:12,&#34;after&#34;:&#34;%s&#34;}`</span></code></pre>
+</div>
+<h3 id="parse-next-page-jsons">Parse next page JSONs</h3>
+
+<p>This is pretty much the same as the conversion of the main page&rsquo;s JSON except these responses have some different attribute names (e.g. the image url is <code>display_url</code> instead of <code>display_src</code>).</p>
+
+<h3 id="download-and-save-images-extracted-from-jsons">Download and save images extracted from JSONs</h3>
+
+<p>After requesting images from Instagram using the <code>Visit</code> function, responses can be handled in <code>OnResponse</code>. It requires a callback as a parameter which is called after the response has arrived. To select responses which include images, we should filter based on <code>Content-Type</code> HTTP header. If it is image, it must be saved.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">c</span><span style="">.</span><span style="color:#a6e22e">OnResponse</span><span style="">(</span><span style="color:#66d9ef">func</span><span style="">(</span><span style="color:#a6e22e">r</span><span style=""> </span><span style="color:#f92672">*</span><span style="color:#a6e22e">colly</span><span style="">.</span><span style="color:#a6e22e">Response</span><span style="">)</span><span style=""> </span><span style="">{</span><span style="">
+</span><span style="">    </span><span style="color:#66d9ef">if</span><span style=""> </span><span style="color:#a6e22e">strings</span><span style="">.</span><span style="color:#a6e22e">Index</span><span style="">(</span><span style="color:#a6e22e">r</span><span style="">.</span><span style="color:#a6e22e">Headers</span><span style="">.</span><span style="color:#a6e22e">Get</span><span style="">(</span><span style="color:#e6db74">&#34;Content-Type&#34;</span><span style="">),</span><span style=""> </span><span style="color:#e6db74">&#34;image&#34;</span><span style="">)</span><span style=""> </span><span style="">&gt;</span><span style=""> </span><span style="color:#f92672">-</span><span style="color:#ae81ff">1</span><span style=""> </span><span style="">{</span><span style="">
+</span><span style="">        </span><span style="color:#a6e22e">r</span><span style="">.</span><span style="color:#a6e22e">Save</span><span style="">(</span><span style="color:#a6e22e">outputDir</span><span style=""> </span><span style="color:#f92672">+</span><span style=""> </span><span style="color:#a6e22e">r</span><span style="">.</span><span style="color:#a6e22e">FileName</span><span style="">())</span><span style="">
+</span><span style="">        </span><span style="color:#66d9ef">return</span><span style="">
+</span><span style="">    </span><span style="">}</span><span style="">
+</span><span style="">    </span><span style="color:#75715e">// handle further response types...
+</span><span style="color:#75715e"></span><span style="">}</span></code></pre>
+</div>
+<h2 id="epilogue">Epilogue</h2>
+
+<p>Scraping JS-only sites isn&rsquo;t always trivial, but can be handled without headless browsers and client side code execution to achieve great performance. This scraper example downloads approximately 1000 images a minute on a single thread over a regular home Internet connection.</p>
+
+<p>It can be tweaked further to handle videos and extract meta information.</p>
+
+    </div>
+    <div class="four wide column">
+        <div class="ui card">
+            <div class="content">
+                <div class="header">2017.11.10</div>
+                <div class="meta">@asciimoo</div>
+            </div>
+        </div>
+	</div>
+  </div>
+  <div class="ui divider"></div>
+</div>
+
+    </div>
+
+    <div class="ui inverted vertical footer segment">
+  <div class="ui container">
+      <div class="ui stackable inverted equal height stackable grid">
+        <div class="five wide column">
+          <div class="ui inverted link list">
+            <a href="#" class="item"></a>
+            <a href="http://go-colly.org/contact/" class="item">Contact Us</a>
+            <a href="http://go-colly.org/docs/" class="item">Documentation</a>
+            <a href="http://go-colly.org/services/" class="item">Services</a>
+            <a href="https://github.com/gocolly/colly" class="item" target="_blank">GitHub</a>
+          </div>
+        </div>
+        <div class="eleven wide right aligned bottom aligned column">
+          <h4 class="ui inverted header">© 2020 Colly Team</h4>
+          <p class="smalltext"><a href="https://github.com/gocolly/site/" target="_blank">Page Source</a><br /><a href="http://go-colly.org/sitemap.xml" target="_blank">Site map</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="http://go-colly.org/js/jquery.min.js"></script>
+<script>
+$(document).ready(function(){
+	$('.right.menu.open').on("click",function(e){
+        e.preventDefault();
+		$('.ui.vertical.navbar.menu').toggle();
+	});
+
+	$('.ui.dropdown').dropdown();
+});
+</script>
+  </body>
+</html>

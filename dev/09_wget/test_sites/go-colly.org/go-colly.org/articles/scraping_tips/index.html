@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+    <title>Web Scraping Tips and Tricks | Colly</title>
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+
+    <meta content="http://go-colly.org/logo.png" property="og:image" />
+    <meta content="Web Scraping Tips and Tricks | Colly" property="og:title" />
+    <meta content="Scraping framework for extracting the data you need from websites, used for a wide range of applications, like data mining, data processing or archiving" property="og:description" />
+    <meta name="description" content="Scraping framework for extracting the data you need from websites, used for a wide range of applications, like data mining, data processing or archiving">
+
+
+    <meta name="generator" content="Hugo 0.29" />
+
+    <META NAME="ROBOTS" CONTENT="INDEX, FOLLOW">
+    
+
+    <link href="http://go-colly.org/css/semantic.min.css" rel="stylesheet" type="text/css" />
+<style>
+html { font-size: 16px; }
+body { display: flex; min-height: 100vh; flex-direction: column; }
+p, li { font-size: 18px; }
+pre > code { background: transparent; font-size: 14px; }
+p > code, li > code { background: #F0F0F0; padding: 2px 4px; font-size: 16px !important; }
+pre { padding: 8px; overflow: auto !important; }
+table { border-collapse: collapse; }
+th { text-align: left; }
+td, th { border: 1px solid #888888; padding: 8px; }
+.maincode * { font-size: 14px; }
+.highlight > div { border-radius: 6px !important; }
+.content { flex: 1; }
+.padding { padding: 16px !important; }
+.bigtext { font-size: 2.5em; }
+.smalltext { font-size: 0.8em; }
+.tip { padding: 0.5em 1em !important; }
+.tip p { font-size: 14px; }
+#menu { padding: 0 20px; }
+.landing { min-height: 300px; }
+.landing h2 { font-size: 1.6em !important; }
+.landing h1, .landing h2, .landing h3 { font-weight: 100 !important; }
+.masthead, .footer { background: linear-gradient(to right, #231333, #1f3c3d) !important; }
+.computer, .tablet { padding: 0 !important; }
+.ui.vertical.navbar.menu { margin-top: -15px !important; width: 100%; display: none; }
+.ui.secondary { width: 100% !important; }
+</style>
+  </head>
+  <body>
+    <div class="ui inverted vertical masthead center aligned segment" id="menu">
+      <div class="ui large secondary inverted icon menu grid">
+        <div class="tablet computer only row">
+        <a class="item" href="http://go-colly.org/"><b>Colly</b></a>
+        
+        <a class="item" href="/docs/">Docs</a>
+        
+        <a class="item" href="/articles/">Articles</a>
+        
+        <a class="item" href="/services/">Services</a>
+        
+        <a class="item" href="/datasets/">Datasets</a>
+        
+        <a class="right item" href="https://godoc.org/github.com/gocolly/colly" target="_blank">GoDoc</a>
+        <a class="item" href="https://github.com/gocolly/colly" target="_blank"><i class="github big icon"></i></a>
+        </div>
+        <div class="mobile only row">
+			<div class="ui secondary navbar menu">
+                <a href="http://go-colly.org/" class="brand item">Colly</a>
+                <div class="right menu open">
+                    <a href="" class="menu item">
+                        <i class="big sidebar icon"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="ui vertical secondary navbar menu">
+				
+				<a class="item" href="/docs/">Docs</a>
+				
+				<a class="item" href="/articles/">Articles</a>
+				
+				<a class="item" href="/services/">Services</a>
+				
+				<a class="item" href="/datasets/">Datasets</a>
+				
+                <div class="ui divider"></div>
+				<a class="item" href="https://godoc.org/github.com/gocolly/colly" target="_blank">GoDoc</a>
+				<a class="item" href="https://github.com/gocolly/colly" target="_blank">GitHub</a>
+			</div>
+        </div>
+      </div>
+    </div>
+    <div class="content">
+    
+<p></p>
+<div class="ui stackable grid container">
+  <div class="row">
+    <div class="sixteen wide column">
+      <h1>Web Scraping Tips and Tricks</h1>
+    </div>
+  </div>
+  <div class="row">
+    <div class="twelve wide column">
+      
+
+<p>Web scraping is extracting data from websites by getting them and selecting the relevant parts and present it in a readable or parsable format.</p>
+
+<p>After you decided which site or sites you want to collect data from, check if an API is available. If possible, use it.  However, if no public API is available or is not sufficient, you can turn to scraping.</p>
+
+<p>But how to collect data from websites and create scrapers which get the job done smoothly?</p>
+
+<h2 id="source-discovery">Source discovery</h2>
+
+<p>First, you need to specify what parts of sites contain relevant data. Selectors can be used to query different elements of a HTML page. The two most popular selector languages are <a href="https://www.w3schools.com/xml/xpath_syntax.asp">XPath</a> and <a href="https://www.w3schools.com/cssref/css_selectors.asp">CSS Selector</a>. HTML source viewers help you come up with appropriate selectors. A simple HTML source viewer is available in browsers. Simply right click in the page and select &ldquo;View page source&rdquo; from the options.</p>
+
+<p>The DOM displayed in browser inspectors include the changes done by JavaScript. So it usually differs from the actual response you need to parse.</p>
+
+<div class="ui info icon message tip">
+  <i class="info circle icon"></i>
+  <div class="content">
+    <div class="header">Tip</div>
+    <p>Always use the source code view of a page.</p>
+  </div>
+</div>
+
+
+<p>If you prefer working form the terminal instead of browsers, <code>wuzz</code> is the right tool for you. It is an interactive HTTP inspector with a terminal UI. You can learn about it more at its <a href="https://github.com/asciimoo/wuzz">GitHub page</a>.</p>
+
+<p>It displays both response body and headers from a site and the contents can be searched. Inspecting headers is an important part of crafting requests to get the desired data. Some services require headers and cookies to return responses as seen in browsers.</p>
+
+<div class="ui info icon message tip">
+  <i class="info circle icon"></i>
+  <div class="content">
+    <div class="header">Tip</div>
+    <p>If you are not receiving the same result using a script from a service, try adding HTTP headers to your requests.</p>
+  </div>
+</div>
+
+
+<h3 id="js-only-web-pages">JS-only web pages</h3>
+
+<p>I am dedicating a complete subsection to JS-only web pages, as there are a few misconceptions regarding them. JS pages are sites which require JavaScript to display its contents. However, to get the data, it is not required to run PhantomJS or other headless webkits. As these scripts get their data from a backend, you must discover and inspect the endpoints scripts use.</p>
+
+<p>Discovering these endpoints can be done using the &ldquo;Network&rdquo; pane of &ldquo;Developer Tools&rdquo; in browsers. Load the page and view what requests are made to what sources. Inspect the content of the responses and find the request which retrieves the data you need. As these requests are done by JS, there is a good chance that responses are in JSON. If you have JSON responses there is no need to come up with selectors, you can easily parse those responses.</p>
+
+<div class="ui info icon message tip">
+  <i class="info circle icon"></i>
+  <div class="content">
+    <div class="header">Tip</div>
+    <p>Discover internal APIs using the Network pane of Developer Tools of browsers.</p>
+  </div>
+</div>
+
+
+<h3 id="selectors">Selectors</h3>
+
+<p>Coming up future proof and simple selectors can be a challenging. But there are a few best practices you can follow.</p>
+
+<p>Look for unique identifiers in the source. For example, sidebars and content are usually separated. Actual posts or content might reside under a uniquely identified element e.g. <code>&lt;div id=&quot;content&quot;&gt;</code>. These elements are tend to be persistent and contain the data in the future. Furthermore, you can get rid of redundant parts of selectors by looking for unique names.</p>
+
+<div class="ui info icon message tip">
+  <i class="info circle icon"></i>
+  <div class="content">
+    <div class="header">Tip</div>
+    <p>Use minimal unique identifiers.</p>
+  </div>
+</div>
+
+
+<p>If the source is difficult to parse, try viewing it without JavaScript. Sites can still show you the information, but without fancy UI elements which only gets in your way during scraping. <code>noscript</code> tags can contain the information in more parsable format and with less noise. Or it might redirect you to a static version of the page, which is also easy to parse (e.g. Google Groups).</p>
+
+<div class="ui info icon message tip">
+  <i class="info circle icon"></i>
+  <div class="content">
+    <div class="header">Tip</div>
+    <p>View the site without JavaScript.</p>
+  </div>
+</div>
+
+
+<h2 id="leave-as-minimal-footprint-as-possible">Leave as minimal footprint as possible</h2>
+
+<p>It is important not to interfere with users who want to use the scraped website in a regular way by viewing it in a browser. Some websites adopted rate limiting or just simply ban IP addresses which are making too many requests in a short period of time. However, there are still sites which are not protected and cannot handle big loads. Inaccessible services means inaccessible information, so scraping fails. To avoid hitting rate limits or disrupting services, do not make unnecessary and too many requests.</p>
+
+<p>Waiting for a few seconds between requests is useful, because it lets services process requests without being overloaded. Also, it makes your script seem more human, so it does not stand out in ordinary traffic.</p>
+
+<div class="ui info icon message tip">
+  <i class="info circle icon"></i>
+  <div class="content">
+    <div class="header">Tip</div>
+    <p>Add delays between requests.</p>
+  </div>
+</div>
+
+
+<p>If you are traversing multiple pages, it is a good idea to create whitelists or blacklists to differentiate between relevant and irrelevant pages. Thus, the number of pages are limited only to the necessary ones.</p>
+
+<p>For instance, you are scraping a web shop under the domain <code>https://shop.com/</code> and you are only interested in books under <code>https://shop.com/books/</code>. Webpages of books might link to different products such as notebooks or pens. To avoid visiting those pages, a whitelist can be created which includes one pattern: <code>https://shop.com/books/*</code>. Hence, only pages containing information on books are requested from the domain.</p>
+
+<div class="ui info icon message tip">
+  <i class="info circle icon"></i>
+  <div class="content">
+    <div class="header">Tip</div>
+    <p>Do not visit pages you are not interested in.</p>
+  </div>
+</div>
+
+
+<p>Furthermore, it is possible that multiple pages link to the same URL. There is no point in requesting it again as it has been visited previously. To eliminate duplicated requests, use a cache to store URLs which has been visited already. In smaller scraping jobs simple in-memory key value stores or lists can do the trick. If you are running your scraper for so long that visited pages might change, you can invalidate the contents of your cache.</p>
+
+<div class="ui info icon message tip">
+  <i class="info circle icon"></i>
+  <div class="content">
+    <div class="header">Tip</div>
+    <p>Cache responses.</p>
+  </div>
+</div>
+
+
+<h2 id="summary">Summary</h2>
+
+<p>Scraping is a powerful technique when you are trying to retrieve and present information in a different format. Colly helps you along the way to get the data quickly and smoothly from any source.</p>
+
+<p>These are our tips and tricks of scraping. If you have further tips, do not hesitate to share it with us.</p>
+
+<p>Happy scraping!</p>
+
+<h2 id="references">References</h2>
+
+<ul>
+<li><a href="https://www.w3schools.com/xml/xpath_syntax.asp">https://www.w3schools.com/xml/xpath_syntax.asp</a></li>
+<li><a href="https://www.w3schools.com/cssref/css_selectors.asp">https://www.w3schools.com/cssref/css_selectors.asp</a></li>
+<li><a href="https://github.com/asciimoo/wuzz">https://github.com/asciimoo/wuzz</a></li>
+</ul>
+
+    </div>
+    <div class="four wide column">
+        <div class="ui card">
+            <div class="content">
+                <div class="header">2017.11.04</div>
+                <div class="meta">@kvch</div>
+            </div>
+        </div>
+	</div>
+  </div>
+  <div class="ui divider"></div>
+</div>
+
+    </div>
+
+    <div class="ui inverted vertical footer segment">
+  <div class="ui container">
+      <div class="ui stackable inverted equal height stackable grid">
+        <div class="five wide column">
+          <div class="ui inverted link list">
+            <a href="#" class="item"></a>
+            <a href="http://go-colly.org/contact/" class="item">Contact Us</a>
+            <a href="http://go-colly.org/docs/" class="item">Documentation</a>
+            <a href="http://go-colly.org/services/" class="item">Services</a>
+            <a href="https://github.com/gocolly/colly" class="item" target="_blank">GitHub</a>
+          </div>
+        </div>
+        <div class="eleven wide right aligned bottom aligned column">
+          <h4 class="ui inverted header">© 2020 Colly Team</h4>
+          <p class="smalltext"><a href="https://github.com/gocolly/site/" target="_blank">Page Source</a><br /><a href="http://go-colly.org/sitemap.xml" target="_blank">Site map</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="http://go-colly.org/js/jquery.min.js"></script>
+<script>
+$(document).ready(function(){
+	$('.right.menu.open').on("click",function(e){
+        e.preventDefault();
+		$('.ui.vertical.navbar.menu').toggle();
+	});
+
+	$('.ui.dropdown').dropdown();
+});
+</script>
+  </body>
+</html>

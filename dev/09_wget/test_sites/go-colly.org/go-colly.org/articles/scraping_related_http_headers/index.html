@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+    <title>The most important HTTP headers for scraping | Colly</title>
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+
+    <meta content="http://go-colly.org/logo.png" property="og:image" />
+    <meta content="The most important HTTP headers for scraping | Colly" property="og:title" />
+    <meta content="Scraping framework for extracting the data you need from websites, used for a wide range of applications, like data mining, data processing or archiving" property="og:description" />
+    <meta name="description" content="Scraping framework for extracting the data you need from websites, used for a wide range of applications, like data mining, data processing or archiving">
+
+
+    <meta name="generator" content="Hugo 0.29" />
+
+    <META NAME="ROBOTS" CONTENT="INDEX, FOLLOW">
+    
+
+    <link href="http://go-colly.org/css/semantic.min.css" rel="stylesheet" type="text/css" />
+<style>
+html { font-size: 16px; }
+body { display: flex; min-height: 100vh; flex-direction: column; }
+p, li { font-size: 18px; }
+pre > code { background: transparent; font-size: 14px; }
+p > code, li > code { background: #F0F0F0; padding: 2px 4px; font-size: 16px !important; }
+pre { padding: 8px; overflow: auto !important; }
+table { border-collapse: collapse; }
+th { text-align: left; }
+td, th { border: 1px solid #888888; padding: 8px; }
+.maincode * { font-size: 14px; }
+.highlight > div { border-radius: 6px !important; }
+.content { flex: 1; }
+.padding { padding: 16px !important; }
+.bigtext { font-size: 2.5em; }
+.smalltext { font-size: 0.8em; }
+.tip { padding: 0.5em 1em !important; }
+.tip p { font-size: 14px; }
+#menu { padding: 0 20px; }
+.landing { min-height: 300px; }
+.landing h2 { font-size: 1.6em !important; }
+.landing h1, .landing h2, .landing h3 { font-weight: 100 !important; }
+.masthead, .footer { background: linear-gradient(to right, #231333, #1f3c3d) !important; }
+.computer, .tablet { padding: 0 !important; }
+.ui.vertical.navbar.menu { margin-top: -15px !important; width: 100%; display: none; }
+.ui.secondary { width: 100% !important; }
+</style>
+  </head>
+  <body>
+    <div class="ui inverted vertical masthead center aligned segment" id="menu">
+      <div class="ui large secondary inverted icon menu grid">
+        <div class="tablet computer only row">
+        <a class="item" href="http://go-colly.org/"><b>Colly</b></a>
+        
+        <a class="item" href="/docs/">Docs</a>
+        
+        <a class="item" href="/articles/">Articles</a>
+        
+        <a class="item" href="/services/">Services</a>
+        
+        <a class="item" href="/datasets/">Datasets</a>
+        
+        <a class="right item" href="https://godoc.org/github.com/gocolly/colly" target="_blank">GoDoc</a>
+        <a class="item" href="https://github.com/gocolly/colly" target="_blank"><i class="github big icon"></i></a>
+        </div>
+        <div class="mobile only row">
+			<div class="ui secondary navbar menu">
+                <a href="http://go-colly.org/" class="brand item">Colly</a>
+                <div class="right menu open">
+                    <a href="" class="menu item">
+                        <i class="big sidebar icon"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="ui vertical secondary navbar menu">
+				
+				<a class="item" href="/docs/">Docs</a>
+				
+				<a class="item" href="/articles/">Articles</a>
+				
+				<a class="item" href="/services/">Services</a>
+				
+				<a class="item" href="/datasets/">Datasets</a>
+				
+                <div class="ui divider"></div>
+				<a class="item" href="https://godoc.org/github.com/gocolly/colly" target="_blank">GoDoc</a>
+				<a class="item" href="https://github.com/gocolly/colly" target="_blank">GitHub</a>
+			</div>
+        </div>
+      </div>
+    </div>
+    <div class="content">
+    
+<p></p>
+<div class="ui stackable grid container">
+  <div class="row">
+    <div class="sixteen wide column">
+      <h1>The most important HTTP headers for scraping</h1>
+    </div>
+  </div>
+  <div class="row">
+    <div class="twelve wide column">
+      
+
+<p>What if by simply passing parameters in the URL is not enough? What can I do if I get different responses in my scraper and browser?
+The answer is using and understanding HTTP headers.</p>
+
+<p>HTTP headers are optional parameters of a HTTP transaction. HTTP requests and responses both can have different HTTP headers.
+They allow the client and the server to pass additional information with the request or the response. A HTTP header consists of its case-insensitive name followed by a colon <code>:</code>, then by its value (without line breaks). Leading white space before the value is ignored.</p>
+
+<p><img src="/http_header_struct.jpg" alt="HTTP Header structure" /></p>
+
+<p>A detailed list of HTTP headers can be found <a href="https://en.wikipedia.org/wiki/List_of_HTTP_header_fields">here</a>.</p>
+
+<p><strong>IMPORTANT: HTTP headers are optional and can contain arbitrary data.</strong></p>
+
+<div class="ui info icon message tip">
+  <i class="info circle icon"></i>
+  <div class="content">
+    <div class="header">Tip</div>
+    <p>Always validate every HTTP header value before using.</p>
+  </div>
+</div>
+
+
+<h2 id="request-headers">Request headers</h2>
+
+<p>These header lines are sent by the client in a HTTP protocol transaction. All lines are <a href="https://www.w3.org/Protocols/rfc822/3_Lexical.html#z1">RFC822</a> format headers. The list of headers is terminated by an empty line.</p>
+
+<h3 id="cookie"><code>Cookie</code></h3>
+
+<p>HTTP cookie (web cookie, browser cookie) is a small piece of data that a server sends to the user&rsquo;s request. The client may store it and send it back with the next request to the same server. Typically, it&rsquo;s used to tell if two requests came from the same client — keeping a user logged-in, for example. It remembers stateful information for the stateless HTTP protocol.
+Cookies are set by the server using <code>Set-Cookie</code>. The requests send back them using <code>Cookie</code>, so the server would know how to handle the request.</p>
+
+<p>Sites often use cookies to implement authentication.</p>
+
+<div class="ui info icon message tip">
+  <i class="info circle icon"></i>
+  <div class="content">
+    <div class="header">Tip</div>
+    <p>Cookies of every request in the browser can be checked using the browser's network inspector. (hotkey: F12)</p>
+  </div>
+</div>
+
+
+<h3 id="user-agent"><code>User-Agent</code></h3>
+
+<p>The <code>User-Agent</code> request header contains a characteristic string that allows the network protocol peers to identify the application type, operating system, software vendor or software version of the requesting software user agent. Validating <code>User-Agent</code> header on server side is a common operation so be sure to use valid browser&rsquo;s <code>User-Agent</code> string to avoid getting blocked.</p>
+
+<p>Example <code>User-Agent</code>s of Firefox browsers:</p>
+
+<pre><code>Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:47.0) Gecko/20100101 Firefox/47.0
+Mozilla/5.0 (Macintosh; Intel Mac OS X x.y; rv:42.0) Gecko/20100101 Firefox/42.0
+</code></pre>
+
+<div class="ui info icon message tip">
+  <i class="info circle icon"></i>
+  <div class="content">
+    <div class="header">Tip</div>
+    <p>Change `User-Agent` strings frequently to reduce the chance of getting blocked.</p>
+  </div>
+</div>
+
+
+<h3 id="host"><code>Host</code></h3>
+
+<p>The <code>Host</code> request header specifies the domain name of the server (for virtual hosting), and (optionally) the TCP port number on which the server is listening.</p>
+
+<p>A <code>Host</code> header field must be sent in all HTTP/1.1 request messages. A <code>400</code> (Bad Request) status code will be sent to any HTTP/1.1 request message that lacks a Host header field or contains more than one.</p>
+
+<h3 id="x-requested-with"><code>X-Requested-With</code></h3>
+
+<p>Mainly used to identify AJAX requests. Most JavaScript frameworks send this field with value of <code>XMLHttpRequest</code>. Use this header to mimic browser&rsquo;s AJAX requests.</p>
+
+<h3 id="accept-language"><code>Accept-Language</code></h3>
+
+<p>The <code>Accept-Language</code> request HTTP header advertises which languages the client is able to understand, and which locale variant is preferred. This header is a hint to be used when the server has no way of determining the language via another way, like a specific URL, that is controlled by an explicit user decision.</p>
+
+<h2 id="response-headers">Response headers</h2>
+
+<p>Response headers are returned by HTTP responses from the server. They might provide further metadata of the response. Their format is the same as request headers&rsquo;.</p>
+
+<h3 id="content-type"><code>Content-Type</code></h3>
+
+<p>This header shows the <a href="https://en.wikipedia.org/wiki/Media_type">MIME type</a> of the requested resource. It can be used to determine the response body type and encoding.</p>
+
+<h3 id="content-length"><code>Content-Length</code></h3>
+
+<p>The <code>Content-Length</code> response header field indicates the size of the response body, in decimal number of OCTETs, sent to the recipient or, in the case of the HEAD method, the size of the entity-body that would have been sent had the request been a GET. (<a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html">rfc2616</a>)</p>
+
+<h3 id="set-cookie"><code>Set-Cookie</code></h3>
+
+<p>The <code>Set-Cookie</code> HTTP response header is used to send cookies from the server to the client. When receiving an HTTP request, a server can send a <code>Set-Cookie</code> header with the response. The cookie is usually sent with requests made to the same server inside a Cookie HTTP header. An expiration date or duration can be specified, after which the cookie is no longer sent. Additionally, restrictions to a specific domain and path can be set, limiting where the cookie is sent.</p>
+
+<p>More details about cookies can be found <a href="https://en.wikipedia.org/wiki/HTTP_cookie">here</a>.</p>
+
+<h2 id="epilogue">Epilogue</h2>
+
+<p>HTTP headers provide additional parameters to HTTP transactions. By sending the appropriate HTTP headers, one can access the response data in a different format. Or by sending cookies back to the server, sessions can be handled. Thus, making the scraper functioning.</p>
+
+<p>The above headers are handled automatically by browsers, that&rsquo;s why it is important to know how and when to use them in scraping.</p>
+
+<p>Happy scraping!</p>
+
+    </div>
+    <div class="four wide column">
+        <div class="ui card">
+            <div class="content">
+                <div class="header">2018.01.01</div>
+                <div class="meta">@asciimoo</div>
+            </div>
+        </div>
+	</div>
+  </div>
+  <div class="ui divider"></div>
+</div>
+
+    </div>
+
+    <div class="ui inverted vertical footer segment">
+  <div class="ui container">
+      <div class="ui stackable inverted equal height stackable grid">
+        <div class="five wide column">
+          <div class="ui inverted link list">
+            <a href="#" class="item"></a>
+            <a href="http://go-colly.org/contact/" class="item">Contact Us</a>
+            <a href="http://go-colly.org/docs/" class="item">Documentation</a>
+            <a href="http://go-colly.org/services/" class="item">Services</a>
+            <a href="https://github.com/gocolly/colly" class="item" target="_blank">GitHub</a>
+          </div>
+        </div>
+        <div class="eleven wide right aligned bottom aligned column">
+          <h4 class="ui inverted header">© 2020 Colly Team</h4>
+          <p class="smalltext"><a href="https://github.com/gocolly/site/" target="_blank">Page Source</a><br /><a href="http://go-colly.org/sitemap.xml" target="_blank">Site map</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="http://go-colly.org/js/jquery.min.js"></script>
+<script>
+$(document).ready(function(){
+	$('.right.menu.open').on("click",function(e){
+        e.preventDefault();
+		$('.ui.vertical.navbar.menu').toggle();
+	});
+
+	$('.ui.dropdown').dropdown();
+});
+</script>
+  </body>
+</html>

@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+    <title>Colly goes 1.0 | Colly</title>
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+
+    <meta content="http://go-colly.org/logo.png" property="og:image" />
+    <meta content="Colly goes 1.0 | Colly" property="og:title" />
+    <meta content="Scraping framework for extracting the data you need from websites, used for a wide range of applications, like data mining, data processing or archiving" property="og:description" />
+    <meta name="description" content="Scraping framework for extracting the data you need from websites, used for a wide range of applications, like data mining, data processing or archiving">
+
+
+    <meta name="generator" content="Hugo 0.29" />
+
+    <META NAME="ROBOTS" CONTENT="INDEX, FOLLOW">
+    
+
+    <link href="http://go-colly.org/css/semantic.min.css" rel="stylesheet" type="text/css" />
+<style>
+html { font-size: 16px; }
+body { display: flex; min-height: 100vh; flex-direction: column; }
+p, li { font-size: 18px; }
+pre > code { background: transparent; font-size: 14px; }
+p > code, li > code { background: #F0F0F0; padding: 2px 4px; font-size: 16px !important; }
+pre { padding: 8px; overflow: auto !important; }
+table { border-collapse: collapse; }
+th { text-align: left; }
+td, th { border: 1px solid #888888; padding: 8px; }
+.maincode * { font-size: 14px; }
+.highlight > div { border-radius: 6px !important; }
+.content { flex: 1; }
+.padding { padding: 16px !important; }
+.bigtext { font-size: 2.5em; }
+.smalltext { font-size: 0.8em; }
+.tip { padding: 0.5em 1em !important; }
+.tip p { font-size: 14px; }
+#menu { padding: 0 20px; }
+.landing { min-height: 300px; }
+.landing h2 { font-size: 1.6em !important; }
+.landing h1, .landing h2, .landing h3 { font-weight: 100 !important; }
+.masthead, .footer { background: linear-gradient(to right, #231333, #1f3c3d) !important; }
+.computer, .tablet { padding: 0 !important; }
+.ui.vertical.navbar.menu { margin-top: -15px !important; width: 100%; display: none; }
+.ui.secondary { width: 100% !important; }
+</style>
+  </head>
+  <body>
+    <div class="ui inverted vertical masthead center aligned segment" id="menu">
+      <div class="ui large secondary inverted icon menu grid">
+        <div class="tablet computer only row">
+        <a class="item" href="http://go-colly.org/"><b>Colly</b></a>
+        
+        <a class="item" href="/docs/">Docs</a>
+        
+        <a class="item" href="/articles/">Articles</a>
+        
+        <a class="item" href="/services/">Services</a>
+        
+        <a class="item" href="/datasets/">Datasets</a>
+        
+        <a class="right item" href="https://godoc.org/github.com/gocolly/colly" target="_blank">GoDoc</a>
+        <a class="item" href="https://github.com/gocolly/colly" target="_blank"><i class="github big icon"></i></a>
+        </div>
+        <div class="mobile only row">
+			<div class="ui secondary navbar menu">
+                <a href="http://go-colly.org/" class="brand item">Colly</a>
+                <div class="right menu open">
+                    <a href="" class="menu item">
+                        <i class="big sidebar icon"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="ui vertical secondary navbar menu">
+				
+				<a class="item" href="/docs/">Docs</a>
+				
+				<a class="item" href="/articles/">Articles</a>
+				
+				<a class="item" href="/services/">Services</a>
+				
+				<a class="item" href="/datasets/">Datasets</a>
+				
+                <div class="ui divider"></div>
+				<a class="item" href="https://godoc.org/github.com/gocolly/colly" target="_blank">GoDoc</a>
+				<a class="item" href="https://github.com/gocolly/colly" target="_blank">GitHub</a>
+			</div>
+        </div>
+      </div>
+    </div>
+    <div class="content">
+    
+<p></p>
+<div class="ui stackable grid container">
+  <div class="row">
+    <div class="sixteen wide column">
+      <h1>Colly goes 1.0</h1>
+    </div>
+  </div>
+  <div class="row">
+    <div class="twelve wide column">
+      
+
+<p>We are happy to announce that the first major release of Colly is here. Our goal was to create a scraping framework to speed up development and let its users concentrate on collecting relevant data. There is no need to reinvent the wheel when writing a new collector. Scrapers built on top of Colly support different storage backends, dynamic configuration and running requests in parallel out of the box. It is also possible to run your scrapers in a distributed manner.</p>
+
+<h2 id="facts-about-the-development">Facts about the development</h2>
+
+<p>It started in September 2017 and has not stopped since. Colly has attracted numerous developers who helped by providing valuable feedback and contributing new features. Let&rsquo;s see the numbers. In the last seven months <strong>30 contributors</strong> have created <strong>338 commits</strong>. Users have opened <strong>78 issues</strong>. 74 of the those were resolved in a few days. Contributors have opened <strong>59 pull requests</strong> and all of them except for one are either got merged or closed. We would like to thank all of our supporters who either contributed code or wrote blog posts about Colly or helped development somehow. We would not be here without you.</p>
+
+<h2 id="milestones">Milestones</h2>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.css" type="text/css" media="screen" charset="utf-8">
+<div id="timeline"></div>
+<style>
+.vis-timeline { border: 4px solid #224488; font-size: 9pt; background: #ececff; }
+.vis-item { border-color: #3366AA; background-color: #FFF; font-size: 9pt; color: #224488; box-shadow: 5px 5px 20px rgba(128,128,128, 0.5); }
+.vis-item, .vis-item.vis-line { border-width: 1px; }
+.vis-item a { text-decoration: none; }
+.vis-item.vis-dot { border-width: 10px; border-radius: 10px; }
+.vis-item.vis-selected { border-color: green; background-color: lightgreen; }
+.vis-time-axis .vis-text { color: #224488; padding-top: 10px; padding-left: 10px; }
+.vis-time-axis .vis-text.vis-major { font-weight: bold; }
+.vis-time-axis .vis-grid.vis-minor { border-width: 2px; border-color: pink; }
+.vis-time-axis .vis-grid.vis-major { border-width: 2px; border-color: #F991A3; }
+</style>
+<script>
+var container = document.getElementById('timeline');
+
+// Create a DataSet (allows two way data-binding)
+var items = new vis.DataSet([
+{id: 1, content: '<a target="_blank" href="https://github.com/gocolly/colly/commit/bcc199e7c146756b0c076cbacd5ad357da4e2e2e">First commit</a>', start: '2017-09-29'},
+{id: 2, content: '<a target="_blank" href="https://github.com/gocolly/colly/commit/7ddf8cbe6501b3fbae8be9f587da03b08ee4676a">First external contribution</a>', start: '2017-10-05'},
+{id: 3, content: '<a target="_blank" href="https://github.com/gocolly/colly/commit/ba9dd651fb82b72779b35a1e2b20e4229c69b5f6">Caching implemented</a>', start: '2017-10-08'},
+{id: 4, content: '<a target="_blank" href="https://github.com/gocolly/colly/commit/59257f38473e210580dfc669b357efff814a9431">Declarative HTML parsing</a>', start: '2017-11-10'},
+{id: 5, content: '<a target="_blank" href="https://github.com/gocolly/colly">Repository moved to gocolly organization</a>', start: '2017-11-11'},
+{id: 6, content: '<a target="_blank" href="https://github.com/gocolly/colly/commit/f454a6cb874e5b48414aca41c7b12018d14bf265">Debugger interface added</a>', start: '2017-11-14'},
+{id: 7, content: '<a target="_blank" href="https://github.com/gocolly/colly/commit/877be4c4d6481e86fb04c16a694e06bca493ed73">XPath and XML support</a>', start: '2018-01-13'},
+{id: 8, content: '<a target="_blank" href="https://github.com/gocolly/colly/commit/2103c5c4ba5bcc8017675876d74f0b6359b29125">Async crawling</a>', start: '2018-01-20'},
+{id: 9, content: '<a target="_blank" href="https://github.com/gocolly/colly/commit/04d96ab7c5bbf879de632fcc683af592be4ba0b8">Storage interface implemented</a>', start: '2018-02-09'},
+{id: 10, content: '<a target="_blank" href="https://github.com/gocolly/colly/commit/119df7afac3fbefd77c229bb366f9da77d5fc490">Performance optimizations (+25% speed)</a>', start: '2018-03-03'},
+{id: 11, content: '<a target="_blank" href="https://github.com/gocolly/colly/tree/master/extensions">Extensions added</a>', start: '2018-03-12'},
+{id: 12, content: '<a target="_blank" href="https://twitter.com/gocolly">Twitter account created</a>', start: '2018-03-13'},
+{id: 13, content: '<a target="_blank" href="https://github.com/gocolly/colly/commit/6d5233174823d61db7151e7c644cee0bb50e4bf2">Requests queue interface</a>', start: '2018-04-13'},
+{id: 14, content: '<a target="_blank" href="https://github.com/gocolly/colly/">Version 1.0.0</a>', start: '2018-05-13'},
+]);
+
+// Configuration for the Timeline
+var options = {
+stack: true,
+tooltip: {
+//       followMouse: true,
+//       overflowMethod: 'cap'
+}
+};
+
+// Create a Timeline
+var timeline = new vis.Timeline(container, items, options);
+</script>
+
+<h2 id="release-v1-0-0">Release v1.0.0</h2>
+
+<p>You might ask why it is released now. Our experience in various deployments in production shows Colly provides a stable and robust platform for developing and running scrapers both locally and in multi server configuration. The feature set is complete and ready to support even complex use cases. What are those features?</p>
+
+<ul>
+<li><p><strong>Rate limiting</strong> During scraping controlling the number of request sent to the scraped site might be crucial. We would not want to disrupt the service by overloading with too many requests. It is bad for the operators of the site and also for us, because the data we would like to collect becomes inaccessible. Thus, request number must be limited. The collector provided by Colly can be configured to send only a limited number of requests in parallel.</p></li>
+
+<li><p><strong>Request caching</strong> To relieve the load from external services and decrease the number of outgoing requests response caching is supported.</p></li>
+
+<li><p><strong>Configurable via environment variables</strong> To eliminate rebuilding of your scraper during fine-tuning, Colly can read configuration options from environment variables. So you can modify its settings without a Golang development environment.</p></li>
+
+<li><p><strong>Proxies/proxy switchers</strong> If the address of scrapers has to be hidden proxies can be added to make requests instead of the machine running the scraping job. Furthermore, to scale Colly without running multiple scraper instances, proxy switchers can be used. Collectors support proxy switchers which can distribute requests among multiple servers. Scraping collected sites is still done on the machine running the scrapers. But the network traffic is moved to different hosts.</p></li>
+
+<li><p><strong>Storage backend and storage interface</strong> During scraping a various data needs to be stored and sometimes shared. To access these objects Colly provides a storage interface. You can create your own storages and use it in your scraper by implementing the interface required. By default Colly saves everything into memory. Additional Colly backend implementations are available for Redis and SQLite3.</p></li>
+
+<li><p><strong>Request queue</strong> Scraping pages in parallel asynchronously is a must have feature when scraping. Colly maintains a request queue where URLs found during scraping are collected. Worker threads of your collector are taking these URLs and creating requests.</p></li>
+
+<li><p><strong>Goodies</strong> The package named <code>extensions</code> provides multiple helpers for collectors. These are common functions implemented in advance, so you don&rsquo;t have to bloat your scraper code with general implementations. An example extension is <code>RandomUserAgent</code> which generates a random User Agent for every request. You can find the full list of Goodies: <a href="https://godoc.org/github.com/gocolly/colly/extensions">https://godoc.org/github.com/gocolly/colly/extensions</a></p></li>
+
+<li><p><strong>Debuggers</strong> Debugging can be painful. Colly tries to ease the pain by providing <code>Debuggers</code> to inspect your scraper. You can simply write debug messages to the console by using <code>LogDebugger</code>. If you prefer web interfaces, we&rsquo;ve got you covered. Colly comes with a web debugger. You can use it by initializing a <code>WebDebugger</code>. See here how debuggers can be used: <a href="https://godoc.org/github.com/gocolly/colly/debug">https://godoc.org/github.com/gocolly/colly/debug</a></p></li>
+</ul>
+
+<p>We the team behind Colly believe that it has become a stable and mature scraping framework capable of supporting complex use cases. We are hoping for an even more productive future. Last but not least <strong>thank you for your support and contributions</strong>.</p>
+
+    </div>
+    <div class="four wide column">
+        <div class="ui card">
+            <div class="content">
+                <div class="header">2018.05.13</div>
+                <div class="meta">@kvch</div>
+            </div>
+        </div>
+	</div>
+  </div>
+  <div class="ui divider"></div>
+</div>
+
+    </div>
+
+    <div class="ui inverted vertical footer segment">
+  <div class="ui container">
+      <div class="ui stackable inverted equal height stackable grid">
+        <div class="five wide column">
+          <div class="ui inverted link list">
+            <a href="#" class="item"></a>
+            <a href="http://go-colly.org/contact/" class="item">Contact Us</a>
+            <a href="http://go-colly.org/docs/" class="item">Documentation</a>
+            <a href="http://go-colly.org/services/" class="item">Services</a>
+            <a href="https://github.com/gocolly/colly" class="item" target="_blank">GitHub</a>
+          </div>
+        </div>
+        <div class="eleven wide right aligned bottom aligned column">
+          <h4 class="ui inverted header">© 2020 Colly Team</h4>
+          <p class="smalltext"><a href="https://github.com/gocolly/site/" target="_blank">Page Source</a><br /><a href="http://go-colly.org/sitemap.xml" target="_blank">Site map</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="http://go-colly.org/js/jquery.min.js"></script>
+<script>
+$(document).ready(function(){
+	$('.right.menu.open').on("click",function(e){
+        e.preventDefault();
+		$('.ui.vertical.navbar.menu').toggle();
+	});
+
+	$('.ui.dropdown').dropdown();
+});
+</script>
+  </body>
+</html>
