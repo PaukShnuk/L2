@@ -1,3 +1,6 @@
+Что выведет программа? Объяснить вывод программы. Объяснить как работают
+defer’ы и порядок их вызовов.
+```go
 package main
 
 import (
@@ -23,3 +26,7 @@ func main() {
 	fmt.Println(test())
 	fmt.Println(anotherTest())
 }
+```
+
+Ответ:
+```
