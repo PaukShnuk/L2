@@ -12,15 +12,16 @@ func parseStr(s string, f *Flag) []string {
 	return strings.Split(s, " ")
 }
 
-func sortByColumn(in []string, flag *Flag) []string {
-	resultData := make([]string, 0, len(in))
-	data := make(map[string][]string)
+// SortByColumn сортировка по колонке
+func SortByColumn(in []string, flag *Flag) []string {
+	resultData := make([]string, 0, len(in)) // результирующие данные
+	data := make(map[string][]string)        // ключ - сортируемый столбец, значение - полная строка
 	keys := make([]string, 0, len(in))
 
 	for _, line := range in {
-		str := parseStr(line, flag)
+		str := parseStr(line, flag) // преобразование строки в колонку
 		var column string
-		if flag.K <= len(str) {
+		if flag.K <= len(str) { // проверка что заданная колонка не превышает количества колонок строки
 			column = str[flag.K-1]
 		}
 		if _, ok := data[column]; !ok {

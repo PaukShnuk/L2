@@ -1,6 +1,7 @@
 package internal
 
-func deleteDuplicate(in []string) []string {
+// DeleteDuplicate - удаление дубликатов
+func DeleteDuplicate(in []string) []string {
 	data := make(map[string]struct{})
 	for _, str := range in {
 		if _, ok := data[str]; !ok {

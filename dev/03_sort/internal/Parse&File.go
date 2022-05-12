@@ -9,6 +9,7 @@ import (
 	"strings"
 )
 
+// Flag - флаги программы
 type Flag struct {
 	K int
 	R bool
@@ -20,10 +21,12 @@ type Flag struct {
 	H bool
 }
 
+// NewFlag - создание объекта с флагами
 func NewFlag() *Flag {
 	return &Flag{}
 }
 
+// ParseFlags - парсинг флагов и путей для файлов из коммандной строки
 func (f *Flag) ParseFlags() {
 	flag.IntVar(&f.K, "k", 1, "указание строки для соритровки")
 	flag.BoolVar(&f.R, "r", false, "сортировка в обратном порядке")
@@ -36,6 +39,7 @@ func (f *Flag) ParseFlags() {
 	flag.Parse()
 }
 
+// TextFile - структурадля работы с файлами
 type TextFile struct {
 	*Flag
 	dateStr []string
@@ -44,12 +48,14 @@ type TextFile struct {
 	outPath string
 }
 
+// NewTextFile - создание TextFile
 func NewTextFile() *TextFile {
 	return &TextFile{
 		Flag: NewFlag(),
 	}
 }
 
+// Read - ф-я чтения из файла, переданного в коммандноцй строки
 func (t *TextFile) Read() {
 	file, err := os.Open(t.inPath)
 
@@ -66,6 +72,7 @@ func (t *TextFile) Read() {
 	t.dateStr = strings.Split(string(dataBytes), "\n")
 }
 
+// Write - ф-я записи в файл новый отсортированных данных
 func (t *TextFile) Write() {
 	if !t.C {
 		file, err := os.Create(t.outPath)
@@ -84,10 +91,12 @@ func (t *TextFile) Write() {
 	}
 }
 
+// SetInputPath - путь исходного файла
 func (t *TextFile) SetInputPath() {
 	t.inPath = flag.Arg(0)
 }
 
+// SetOutputPath - путь выходного файла
 func (t *TextFile) SetOutputPath() {
 	t.outPath = flag.Arg(1)
 }

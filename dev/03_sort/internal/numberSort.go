@@ -6,6 +6,7 @@ import (
 	"strconv"
 )
 
+// SortByNumbers - сортировка по числам
 func SortByNumbers(in []string, flag *Flag) []string {
 	resultData := make([]string, 0, len(in))
 	data := make(map[float64][]string)
@@ -13,14 +14,14 @@ func SortByNumbers(in []string, flag *Flag) []string {
 
 	for _, line := range in {
 		str := parseStr(line, flag)
-		column, err := strconv.ParseFloat("-inf", 32)
+		column, err := strconv.ParseFloat("-inf", 32) // если колонки нет значение -infinity
 		if err != nil {
 			log.Fatal(err)
 		}
 		if flag.K <= len(str) {
-			column, err = strconv.ParseFloat(str[flag.K-1], 32)
+			column, err = strconv.ParseFloat(str[flag.K-1], 32) // парсим строку в число
 			if err != nil {
-				column, err = strconv.ParseFloat("-inf", 32)
+				column, err = strconv.ParseFloat("-inf", 32) // если не число, то приравниваем -inf для сортировки
 				if err != nil {
 					log.Fatal(err)
 				}

@@ -42,7 +42,7 @@ func (a *AnagramField) AddToAnagramField(s string) {
 	a.tail = append(a.tail, s)
 }
 
-// Sort соритровка
+// Sort сортировка
 func (a *AnagramField) Sort() {
 	sort.Strings(a.tail)
 }

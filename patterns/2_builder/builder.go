@@ -1,7 +1,20 @@
 package main
 
+// уменьшения размера конструктора создаваемого объекта;
+// создания немного отличающихся в значениях, но одинаковых в конструкции объектов.
+/*
+ Паттерн Строитель предлагает вынести конструирование объекта за пределы его собственного класса, поручив это дело
+ отдельным объектам, называемым строителями.
+плюсы:
+ Создание объекта пошаговое.
+ Позволяет использовать один и тот же код для создания различных но схожих объектов.
+минусы:
+ Усложняет код программы из-за введения дополнительных классов.
+*/
+
 import "fmt"
 
+// картина, которую может нарисоватьь художник
 type Picture struct {
 	genBack  string
 	rearBack string
@@ -14,6 +27,7 @@ func NewPicture(gb string, rb string, m string, d string, s string) *Picture {
 	return &Picture{gb, rb, m, d, s}
 }
 
+// интерфейс абстрактного художника
 type Artist interface {
 	paintGeneralBackground(g string)
 	paintRearBackground(r string)
@@ -31,6 +45,7 @@ func NewArtist(i int) Artist {
 	}
 }
 
+// художник-реалист
 type RealistArtist struct {
 	genBack  string
 	rearBack string
@@ -43,6 +58,7 @@ func NewRealistArtist() *RealistArtist {
 	return &RealistArtist{}
 }
 
+// реализация поведений для художника-реалиста
 func (r *RealistArtist) paintGeneralBackground(g string) {
 	r.genBack = g
 }
@@ -63,10 +79,12 @@ func (r *RealistArtist) setStyle() {
 	r.style = "realistic"
 }
 
+// завершение карины
 func (r *RealistArtist) draw() *Picture {
 	return NewPicture(r.genBack, r.rearBack, r.main, r.details, r.style)
 }
 
+// художник-импрессионист
 type ImpressionistArtist struct {
 	genBack  string
 	rearBack string
@@ -79,6 +97,7 @@ func NewImpressionArtist() *ImpressionistArtist {
 	return &ImpressionistArtist{}
 }
 
+// опять же реализация поведения художника-импрессиониста как художника в целом
 func (r *ImpressionistArtist) paintGeneralBackground(g string) {
 	r.genBack = g
 }

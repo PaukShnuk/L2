@@ -1,5 +1,6 @@
 package internal
 
+// equal - ф-я првоерки данных на равенство
 func equal(a, b []string) bool {
 	if len(a) != len(b) {
 		return false
@@ -12,10 +13,11 @@ func equal(a, b []string) bool {
 	return true
 }
 
+// RunSort - ф-я запуска соритровки
 func RunSort(file *TextFile) {
 	var output []string
 	if file.U {
-		file.dateStr = deleteDuplicate(file.dateStr)
+		file.dateStr = DeleteDuplicate(file.dateStr)
 	}
 	if file.M {
 		output = SortByMonth(file.dateStr, file.Flag)
@@ -24,9 +26,9 @@ func RunSort(file *TextFile) {
 	} else if file.N {
 		output = SortByNumbers(file.dateStr, file.Flag)
 	} else if file.K > 1 {
-		output = sortByColumn(file.dateStr, file.Flag)
+		output = SortByColumn(file.dateStr, file.Flag)
 	} else {
-		output = mainSort(file.dateStr, file.Flag)
+		output = MainSort(file.dateStr, file.Flag)
 	}
 
 	if file.C {

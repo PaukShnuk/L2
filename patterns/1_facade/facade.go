@@ -1,10 +1,25 @@
 package main
 
+//скрывает за фасадом сложность инициализации отдельных служб для клиента
+
+/*
+	Плюсы:
+	- меньше кода, меньше ошибок, быстрее разработка.
+	- упрощение работы с подсистемой для клиента
+	Минусы:
+	- дополнительная разработка.
+	- Нужно хорошо продумать реализуемый набор интерфейсов для клиента
+	Реальные примеры:
+	Используя паттерн «Фасад», реализуем унифицированный интерфейс к некоторой подсистеме авторизации пользователей.
+	Сама подсистема авторизации (в данном примере), безусловно не претендует на «сложную систему»
+*/
+
 import "fmt"
 
 type PSU struct {
 }
 
+// запуск PSU
 func (p *PSU) startPsu() string {
 	return "psu is started"
 }
@@ -12,6 +27,7 @@ func (p *PSU) startPsu() string {
 type MotherBoard struct {
 }
 
+// запуск MotherBoard
 func (m *MotherBoard) startMotherBoard() string {
 	return "motherboard is started"
 }
@@ -19,6 +35,7 @@ func (m *MotherBoard) startMotherBoard() string {
 type CPU struct {
 }
 
+// запуск CPU
 func (c *CPU) startCpu() string {
 	return "cpu is started"
 }
@@ -26,10 +43,12 @@ func (c *CPU) startCpu() string {
 type GPU struct {
 }
 
+// запуск GPU
 func (g *GPU) startGpu() string {
 	return "gpu is started"
 }
 
+// запуск компьютера в целом
 type startComputer struct {
 	psu PSU
 	mb  MotherBoard

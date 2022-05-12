@@ -5,6 +5,7 @@ import (
 	"strings"
 )
 
+// month промежуточная мапа с значениями месяцев
 var month = map[string]int{
 	"JAN": 1,
 	"FEB": 2,
@@ -20,6 +21,7 @@ var month = map[string]int{
 	"DEC": 12,
 }
 
+// Months - реализуем интерфейс из sort
 type Months []string
 
 func (m Months) Len() int {
@@ -33,20 +35,22 @@ func (m Months) Swap(i, j int) {
 func (m Months) Less(i, j int) bool {
 	return month[m[i]] < month[m[j]]
 }
+
+// SortByMonth - сортировка по месяцам
 func SortByMonth(in []string, flag *Flag) []string {
 	resultData := make([]string, 0, len(in))
-	data := make(map[string][]string)
-	keys := make(Months, 0, len(in))
+	data := make(map[string][]string) //столбец сортировки:полные строки
+	keys := make(Months, 0, len(in))  // столбцы для сортировки
 
 	for _, line := range in {
 		str := parseStr(line, flag)
 		var column string
-		if flag.K <= len(str) {
+		if flag.K <= len(str) { // если столбец существует в строке
 			column = str[flag.K-1]
-			if _, ok := month[strings.ToUpper(column[:3])]; ok {
+			if _, ok := month[strings.ToUpper(column[:3])]; ok { // соответсвует ли первые три Заглавные буквы месяцу
 				column = strings.ToUpper(column[:3])
 			} else {
-				column = ""
+				column = "" // если нет то осталяем как пустую строку
 			}
 		}
 		if _, ok := data[column]; !ok {

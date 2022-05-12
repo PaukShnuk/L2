@@ -2,24 +2,18 @@ package main
 
 import (
 	"fmt"
+	"os"
 )
 
-func test() (x int) {
-	defer func() {
-		x++
-	}()
-	x = 1
-	return
-}
-func anotherTest() int {
-	var x int
-	defer func() {
-		x++
-	}()
-	x = 1
-	return x
+func Foo() error {
+	var err *os.PathError = nil
+	return err
 }
 func main() {
-	fmt.Println(test())
-	fmt.Println(anotherTest())
+	err := Foo()
+	fmt.Println(err)        // nil
+	fmt.Println(err == nil) // false
+	var err2 interface{}
+	fmt.Println(err2)        // nil
+	fmt.Println(err2 == nil) // true
 }
