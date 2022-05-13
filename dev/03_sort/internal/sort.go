@@ -1,7 +1,7 @@
 package internal
 
 // equal - ф-я првоерки данных на равенство
-func equal(a, b []string) bool {
+func equal(a, b []string) bool { // просто сравнение входных данных с отсортированными, равны ли они
 	if len(a) != len(b) {
 		return false
 	}

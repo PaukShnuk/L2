@@ -17,6 +17,7 @@ func charAppend(str *[]rune, value rune, c rune) {
 	}
 }
 
+// Unpack - распаковка строки
 func Unpack(str string) (string, error) {
 	var outputString []rune
 	var prevSymbolIsDigit = true // флаг принадлежности последнего символа
